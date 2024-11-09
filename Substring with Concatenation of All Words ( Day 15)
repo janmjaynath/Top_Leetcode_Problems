@@ -1,0 +1,44 @@
+import java.util.*;
+
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        if (s == null || s.length() == 0 || words == null || words.length == 0) {
+            return new ArrayList<>();
+        }
+
+        Map<String, Integer> frequency = new HashMap<>();
+        for (String word : words) {
+            frequency.put(word, frequency.getOrDefault(word, 0) + 1);
+        }
+
+        int eachLength = words[0].length();
+        int totalLength = words.length;
+
+        List<Integer> result = new ArrayList<>();
+
+        for (int i = 0; i <= s.length() - eachLength * totalLength; i++) {
+            Map<String, Integer> seenWords = new HashMap<>();
+
+            for (int j = 0; j < totalLength; j++) {
+                int wordIndex = i + j * eachLength;
+                String word = s.substring(wordIndex, wordIndex + eachLength);
+
+                if (!frequency.containsKey(word)) {
+                    break;
+                }
+
+                seenWords.put(word, seenWords.getOrDefault(word, 0) + 1);
+
+                if (seenWords.get(word) > frequency.getOrDefault(word, 0)) {
+                    break;
+                }
+
+                if (j + 1 == totalLength) {
+                    result.add(i);
+                }
+            }
+        }
+
+        return result;
+    }
+}
