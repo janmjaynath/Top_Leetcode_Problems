@@ -1,0 +1,22 @@
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> comb = new ArrayList<>();
+        getComb(0,candidates , new ArrayList(),comb,target);
+        return comb;
+    }
+
+    public void getComb(int start,int num[],List<Integer> curr,List<List<Integer>> comb,int target){
+        if(target == 0){
+             comb.add(new ArrayList(curr));
+        }
+        if(target < 0){
+           return;
+        }
+
+        for(int i=start;i<num.length;i++){
+            curr.add(num[i]);
+            getComb(i,num,curr,comb,target-num[i]);
+            curr.remove(curr.size()-1);
+        }
+    }
+}
