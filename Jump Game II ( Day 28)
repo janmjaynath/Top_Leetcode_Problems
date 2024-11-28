@@ -1,0 +1,25 @@
+class Solution {
+    public int jump(int[] nums) {
+       
+       int jumps = 0;         // Counts the total jumps made
+        int coverage = 0;      // Tracks the maximum index reachable with the current number of jumps
+        int lastJumpIdx = 0;   // The last index where a jump was made
+
+        for (int i = 0; i < nums.length - 1; i++) {
+            // Update coverage with the maximum reach from current index
+            coverage = Math.max(coverage, i + nums[i]);
+
+            // When you reach the lastJumpIdx, you need to make a jump
+            if (i == lastJumpIdx) {
+                jumps++;        // Increment the jump count
+                lastJumpIdx = coverage; // Update the last jump index to the furthest reachable point
+
+                // If coverage has already reached or passed the last index, return the jumps
+                if (coverage >= nums.length - 1) {
+                    break;
+                }
+            }
+        }
+        return jumps;
+    }
+}
