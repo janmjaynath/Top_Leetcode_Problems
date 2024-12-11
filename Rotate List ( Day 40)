@@ -1,0 +1,36 @@
+class Solution {
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null || k == 0) {
+            return head;
+        }
+
+        // Find the size of the list
+        ListNode temp = head;
+        int size = 1;  // Initialize size as 1 since we are counting from head
+        while (temp.next != null) {
+            size++;
+            temp = temp.next;
+        }
+
+        // Modulo to avoid unnecessary rotations
+        k = k % size;
+        if (k == 0) {
+            return head;  // No rotation needed if k is 0 after modulus
+        }
+
+        // Step 3: Connect the last node to the head to make it a circular list
+        temp.next = head;  // Now the list is circular
+
+        // Find the new tail (size - k - 1) and new head (size - k)
+        ListNode newTail = head;
+        for (int i = 0; i < size - k - 1; i++) {
+            newTail = newTail.next;
+        }
+
+        // Break the circle and set the new head
+        ListNode newHead = newTail.next;
+        newTail.next = null;  // Break the circular link
+
+        return newHead;  // Return the new head of the rotated list
+    }
+}
