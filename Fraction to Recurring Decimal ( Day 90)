@@ -1,0 +1,57 @@
+import java.util.HashMap;
+
+class Solution {
+    public String fractionToDecimal(int numerator, int denominator) {
+        // If numerator is 0, the result is always "0".
+        if (numerator == 0) return "0";
+        
+        StringBuilder ans = new StringBuilder();
+        
+        // Handle the sign of the result. If either numerator or denominator is negative (but not both), the result is negative.
+        if ((numerator < 0) ^ (denominator < 0)) {
+            ans.append("-");
+        }
+        
+        // Convert numerator and denominator to long to avoid overflow, and work with their absolute values.
+        long num = Math.abs((long) numerator);
+        long den = Math.abs((long) denominator);
+        
+        // Append the integer part of the quotient.
+        long q = num / den;
+        long r = num % den;
+        ans.append(q);
+        
+        // If there is no remainder, return the result as there's no fractional part.
+        if (r == 0) {
+            return ans.toString();
+        }
+        
+        // Otherwise, there is a fractional part, so append the decimal point.
+        ans.append(".");
+        
+        // Map to store the remainder and the position where it appeared in the result string.
+        HashMap<Long, Integer> map = new HashMap<>();
+        
+        // Loop until the remainder is zero or we find a repeating remainder.
+        while (r != 0) {
+            // If we have already seen this remainder, there's a repeating cycle.
+            if (map.containsKey(r)) {
+                int start = map.get(r);  // Get the starting index of the repeating part.
+                ans.insert(start, "(");  // Insert the opening parenthesis.
+                ans.append(")");         // Append the closing parenthesis.
+                break;
+            }
+            
+            // Store the current remainder with its position in the result string.
+            map.put(r, ans.length());
+            
+            // Multiply remainder by 10 to get the next digit.
+            r *= 10;
+            q = r / den;  // Get the next quotient.
+            r = r % den;  // Update remainder.
+            ans.append(q);  // Append the quotient.
+        }
+        
+        return ans.toString();
+    }
+}
